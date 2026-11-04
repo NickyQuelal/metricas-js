@@ -1,33 +1,36 @@
 // Calcula el total de un pedido con descuentos
-function calcularTotal(pedido) {
-  let total = 0;
-  for (const item of pedido.items) {
-    if (item.cantidad > 0 && item.precio > 0) {
-      total += item.cantidad * item.precio;
+function esItemValido(item) {
+  return item.cantidad > 0 && item.precio > 0;
+}
+
+function calcularSubtotal(items) {
+  let subtotal = 0;
+  for (const item of items) {
+    if (esItemValido(item)) {
+      subtotal += item.cantidad * item.precio;
     }
   }
-  if (pedido.cliente === "VIP") {
-    total = total * 0.9;
-  } else if (pedido.cliente === "FRECUENTE") {
-    total = total * 0.95;
+  return subtotal;
+}
+
+function aplicarDescuentoCliente(total, cliente) {
+  if (cliente === "VIP") {
+    return total * 0.9;
   }
-  if (total > 100 || pedido.cupon) {
-    total = total - 5;
+  if (cliente === "FRECUENTE") {
+    return total * 0.95;
   }
   return total;
 }
 
 function calcularTotalTienda(pedido) {
-  let total = 0;
-  for (const item of pedido.items) {
-    if (item.cantidad > 0 && item.precio > 0) {
-      total += item.cantidad * item.precio;
-    }
-  }
-  if (pedido.cliente === "VIP") {
-    total = total * 0.9;
-  } else if (pedido.cliente === "FRECUENTE") {
-    total = total * 0.95;
+  return aplicarDescuentoCliente(calcularSubtotal(pedido.items), pedido.cliente);
+}
+
+function calcularTotal(pedido) {
+  let total = calcularTotalTienda(pedido);
+  if (total > 100 || pedido.cupon) {
+    total = total - 5;
   }
   return total;
 }
