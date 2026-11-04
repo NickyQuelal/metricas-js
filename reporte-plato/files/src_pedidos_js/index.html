@@ -47,11 +47,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">59.06</p>
+      <p class="stat">88.14</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">36</p>
+      <p class="stat">38</p>
     </div>
   </div>
   <div class="row historical">
@@ -65,11 +65,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">33.55</p>
+      <p class="stat">20.06</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.24</p>
+      <p class="stat">0.27</p>
     </div>
   </div>
 </div>
@@ -93,37 +93,39 @@
 <div class="container">
   <div class="row">
     <textarea id="file-source" class="col-md-12">// Calcula el total de un pedido con descuentos
-function calcularTotal(pedido) {
-  let total = 0;
-  for (const item of pedido.items) {
-    if (item.cantidad &gt; 0 &amp;&amp; item.precio &gt; 0) {
-      total += item.cantidad * item.precio;
-    }
-  }
-  if (pedido.cliente === &quot;VIP&quot;) {
-    total = total * 0.9;
-  } else if (pedido.cliente === &quot;FRECUENTE&quot;) {
-    total = total * 0.95;
-  }
-  if (total &gt; 100 || pedido.cupon) {
-    total = total - 5;
-  }
-  return total;
+const DESCUENTOS_CLIENTE = new Map([
+  [&quot;VIP&quot;, 0.9],
+  [&quot;FRECUENTE&quot;, 0.95]
+]);
+const DESCUENTO_FIJO = 5;
+const UMBRAL_DESCUENTO_FIJO = 100;
+
+function esItemValido(item) {
+  return item.cantidad &gt; 0 &amp;&amp; item.precio &gt; 0;
+}
+
+function calcularSubtotal(items) {
+  return items
+    .filter(esItemValido)
+    .reduce((subtotal, item) =&gt; subtotal + item.cantidad * item.precio, 0);
+}
+
+function aplicarDescuentoCliente(total, cliente) {
+  const factor = DESCUENTOS_CLIENTE.has(cliente) ? DESCUENTOS_CLIENTE.get(cliente) : 1;
+  return total * factor;
+}
+
+function aplicaDescuentoFijo(total, pedido) {
+  return total &gt; UMBRAL_DESCUENTO_FIJO || Boolean(pedido.cupon);
 }
 
 function calcularTotalTienda(pedido) {
-  let total = 0;
-  for (const item of pedido.items) {
-    if (item.cantidad &gt; 0 &amp;&amp; item.precio &gt; 0) {
-      total += item.cantidad * item.precio;
-    }
-  }
-  if (pedido.cliente === &quot;VIP&quot;) {
-    total = total * 0.9;
-  } else if (pedido.cliente === &quot;FRECUENTE&quot;) {
-    total = total * 0.95;
-  }
-  return total;
+  return aplicarDescuentoCliente(calcularSubtotal(pedido.items), pedido.cliente);
+}
+
+function calcularTotal(pedido) {
+  const total = calcularTotalTienda(pedido);
+  return aplicaDescuentoFijo(total, pedido) ? total - DESCUENTO_FIJO : total;
 }
 
 module.exports = { calcularTotal, calcularTotalTienda };

@@ -17,7 +17,8 @@ function calcularSubtotal(items) {
 }
 
 function aplicarDescuentoCliente(total, cliente) {
-  return total * (DESCUENTOS_CLIENTE.get(cliente) ?? 1);
+  const factor = DESCUENTOS_CLIENTE.has(cliente) ? DESCUENTOS_CLIENTE.get(cliente) : 1;
+  return total * factor;
 }
 
 function aplicaDescuentoFijo(total, pedido) {
