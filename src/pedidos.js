@@ -1,26 +1,27 @@
 // Calcula el total de un pedido con descuentos
+const DESCUENTOS_CLIENTE = new Map([
+  ["VIP", 0.9],
+  ["FRECUENTE", 0.95]
+]);
+const DESCUENTO_FIJO = 5;
+const UMBRAL_DESCUENTO_FIJO = 100;
+
 function esItemValido(item) {
   return item.cantidad > 0 && item.precio > 0;
 }
 
 function calcularSubtotal(items) {
-  let subtotal = 0;
-  for (const item of items) {
-    if (esItemValido(item)) {
-      subtotal += item.cantidad * item.precio;
-    }
-  }
-  return subtotal;
+  return items
+    .filter(esItemValido)
+    .reduce((subtotal, item) => subtotal + item.cantidad * item.precio, 0);
 }
 
 function aplicarDescuentoCliente(total, cliente) {
-  if (cliente === "VIP") {
-    return total * 0.9;
-  }
-  if (cliente === "FRECUENTE") {
-    return total * 0.95;
-  }
-  return total;
+  return total * (DESCUENTOS_CLIENTE.get(cliente) ?? 1);
+}
+
+function aplicaDescuentoFijo(total, pedido) {
+  return total > UMBRAL_DESCUENTO_FIJO || Boolean(pedido.cupon);
 }
 
 function calcularTotalTienda(pedido) {
@@ -28,11 +29,8 @@ function calcularTotalTienda(pedido) {
 }
 
 function calcularTotal(pedido) {
-  let total = calcularTotalTienda(pedido);
-  if (total > 100 || pedido.cupon) {
-    total = total - 5;
-  }
-  return total;
+  const total = calcularTotalTienda(pedido);
+  return aplicaDescuentoFijo(total, pedido) ? total - DESCUENTO_FIJO : total;
 }
 
 module.exports = { calcularTotal, calcularTotalTienda };
