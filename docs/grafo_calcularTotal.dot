@@ -1,0 +1,24 @@
+digraph G {
+  rankdir=TB; node [shape=circle, fontname="Arial", fontsize=11, width=0.5];
+  edge [fontname="Arial", fontsize=10];
+  n1 [label="1\ntotal=0", shape=ellipse];
+  n2 [label="2\nfor: ¿más\nítems?", shape=diamond];
+  n3 [label="3\ncantidad>0", shape=diamond];
+  n4 [label="4\nprecio>0\n(&&)", shape=diamond];
+  n5 [label="5\ntotal +=\ncant*precio", shape=ellipse];
+  n6 [label="6\n¿VIP?", shape=diamond];
+  n7 [label="7\ntotal*0.9", shape=ellipse];
+  n8 [label="8\n¿FRECUENTE?", shape=diamond];
+  n9 [label="9\ntotal*0.95", shape=ellipse];
+  n10 [label="10\ntotal>100", shape=diamond];
+  n11 [label="11\ncupon\n(||)", shape=diamond];
+  n12 [label="12\ntotal-5", shape=ellipse];
+  n13 [label="13\nreturn", shape=ellipse];
+  n1->n2; n2->n3 [label="sí"]; n2->n6 [label="no"];
+  n3->n4 [label="V"]; n3->n2 [label="F"];
+  n4->n5 [label="V"]; n4->n2 [label="F"]; n5->n2;
+  n6->n7 [label="V"]; n6->n8 [label="F"]; n7->n10;
+  n8->n9 [label="V"]; n8->n10 [label="F"]; n9->n10;
+  n10->n12 [label="V"]; n10->n11 [label="F"];
+  n11->n12 [label="V"]; n11->n13 [label="F"]; n12->n13;
+}
