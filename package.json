@@ -1,0 +1,26 @@
+{
+  "name": "metricas",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "cobertura": "jest --coverage --collectCoverageFrom=src/**/*.js",
+    "lint": "eslint src/",
+    "tamano": "sloc src/",
+    "duplicados": "jscpd src/ --min-lines 5 --reporters console",
+    "mantenibilidad": "es6-plato -r -d reporte-plato src/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "es6-plato": "^1.2.3",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "jest": "^30.5.2",
+    "jscpd": "^5.4.2",
+    "sloc": "^0.3.2"
+  }
+}
