@@ -1,8 +1,8 @@
 # Actividad: Métricas de calidad en JavaScript (ISO/IEC 25010)
 
-**Nombre:** Nicole _(completa tu apellido)_  **Fecha:** 04/11/2026
+**Nombre:** Nicole Estefanía Quelal Néjer **Fecha:** 04/11/2026
 **Modalidad:** individual · **Código evaluado:** `src/pedidos.js` (Anexo A)
-**Repositorio:** _(pega aquí el enlace de GitHub)_ · Ramas: `medicion-inicial` y `refactorizacion`
+**Repositorio:** https://github.com/NickyQuelal/metricas-js· Ramas: `medicion-inicial` y `refactorizacion`
 
 ---
 
